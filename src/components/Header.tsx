@@ -13,16 +13,18 @@ export const Header: React.FC = () => {
     <header className="h-16 border-b bg-background flex items-center justify-between px-6 shadow-sm">
       {/* Логотип */}
       <div className="flex items-center gap-3">
-        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-          <span className="text-primary-foreground font-bold text-sm">Р</span>
-        </div>
+        <img 
+          src="/logo-rmk.png" 
+          alt="РМК Логотип" 
+          className="w-8 h-8"
+        />
         <h1 className="text-xl font-semibold text-foreground">RMK Assist</h1>
       </div>
 
       {/* Пользователь и управление */}
       <div className="flex items-center gap-4">
         {/* Информация о пользователе */}
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
           <User className="w-4 h-4" />
           <span>{username}. Пользователь</span>
         </div>

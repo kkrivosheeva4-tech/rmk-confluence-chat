@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
 import { SidebarLeft } from '../components/SidebarLeft';
 import { SidebarRight } from '../components/SidebarRight';
 import { ChatContainer } from '../components/ChatContainer';
@@ -29,10 +30,16 @@ const Index = () => {
       <Header />
       
       <div className="flex-1 flex overflow-hidden">
-        <SidebarLeft />
+        <div className="hidden md:block">
+          <SidebarLeft />
+        </div>
         <ChatContainer />
-        <SidebarRight />
+        <div className="hidden lg:block">
+          <SidebarRight />
+        </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

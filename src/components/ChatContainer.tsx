@@ -1,7 +1,12 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Menu, Settings } from 'lucide-react';
+import { Button } from './ui/button';
 import { ChatBubble } from './ChatBubble';
 import { ChatInput } from './ChatInput';
 import { WelcomeChips } from './WelcomeChips';
+import { SidebarLeft } from './SidebarLeft';
+import { SidebarRight } from './SidebarRight';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { useChatStore } from '../store/chatStore';
 import { useUserStore } from '../store/userStore';
 import { LLMAdapter } from '../services/LLMAdapter';
@@ -19,6 +24,8 @@ export const ChatContainer: React.FC = () => {
   } = useChatStore();
   const { role } = useUserStore();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [leftSheetOpen, setLeftSheetOpen] = useState(false);
+  const [rightSheetOpen, setRightSheetOpen] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -70,6 +77,33 @@ export const ChatContainer: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col h-full">
+      {/* Мобильные кнопки навигации */}
+      <div className="md:hidden flex justify-between items-center p-2 border-b bg-background">
+        <Sheet open={leftSheetOpen} onOpenChange={setLeftSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="sm">
+              <Menu className="w-4 h-4" />
+              <span className="ml-2 text-sm">Чаты</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-80 p-0">
+            <SidebarLeft />
+          </SheetContent>
+        </Sheet>
+
+        <Sheet open={rightSheetOpen} onOpenChange={setRightSheetOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="sm" className="lg:hidden">
+              <Settings className="w-4 h-4" />
+              <span className="ml-2 text-sm">Панель</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-80 p-0">
+            <SidebarRight />
+          </SheetContent>
+        </Sheet>
+      </div>
+
       {/* Область сообщений */}
       <div className="flex-1 overflow-auto p-4 space-y-4">
         {isEmpty ? (

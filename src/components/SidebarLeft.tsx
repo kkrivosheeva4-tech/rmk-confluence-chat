@@ -20,15 +20,15 @@ export const SidebarLeft: React.FC = () => {
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-sidebar border-r border-sidebar-border p-2 flex flex-col">
-        <CustomTooltip content="История чатов">
+      <div className="w-16 bg-sidebar border-r border-sidebar-border p-2 flex flex-col gap-2">
+        <CustomTooltip content="Развернуть историю">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(false)}
-            className="w-full h-12 mb-4"
+            className="w-full h-10"
           >
-            <MessageSquare className="w-5 h-5" />
+            <MessageSquare className="w-4 h-4" />
           </Button>
         </CustomTooltip>
         
@@ -37,11 +37,28 @@ export const SidebarLeft: React.FC = () => {
             variant="ghost"
             size="sm"
             onClick={createNewChat}
-            className="w-full h-12"
+            className="w-full h-10"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4" />
           </Button>
         </CustomTooltip>
+
+        <div className="border-t border-sidebar-border pt-2 mt-2 space-y-1 overflow-auto">
+          {chatHistory.slice(0, 8).map((chat) => (
+            <CustomTooltip key={chat.id} content={chat.title}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => loadChat(chat.id)}
+                className={`w-full h-10 p-0 ${
+                  currentChatId === chat.id ? 'bg-sidebar-accent' : ''
+                }`}
+              >
+                <MessageSquare className="w-4 h-4" />
+              </Button>
+            </CustomTooltip>
+          ))}
+        </div>
       </div>
     );
   }

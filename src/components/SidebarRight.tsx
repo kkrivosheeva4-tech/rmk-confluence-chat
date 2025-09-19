@@ -87,17 +87,73 @@ export const SidebarRight: React.FC = () => {
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-sidebar border-l border-sidebar-border p-2 flex flex-col">
-        <CustomTooltip content="Источники и настройки">
+      <div className="w-16 bg-sidebar border-l border-sidebar-border p-2 flex flex-col gap-2">
+        <CustomTooltip content="Развернуть панель">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setIsCollapsed(false)}
-            className="w-full h-12"
+            className="w-full h-10"
           >
-            <Settings className="w-5 h-5" />
+            <Settings className="w-4 h-4" />
           </Button>
         </CustomTooltip>
+        
+        <CustomTooltip content="Источники">
+          <Button variant="ghost" size="sm" className="w-full h-10">
+            <FileText className="w-4 h-4" />
+          </Button>
+        </CustomTooltip>
+        
+        <CustomTooltip content="Помогло">
+          <Button variant="ghost" size="sm" className="w-full h-10">
+            <ThumbsUp className="w-4 h-4" />
+          </Button>
+        </CustomTooltip>
+        
+        <CustomTooltip content="Не помогло">
+          <Button variant="ghost" size="sm" className="w-full h-10">
+            <ThumbsDown className="w-4 h-4" />
+          </Button>
+        </CustomTooltip>
+        
+        <CustomTooltip content="Эскалация">
+          <Button variant="ghost" size="sm" className="w-full h-10" onClick={handleEscalation}>
+            <AlertTriangle className="w-4 h-4" />
+          </Button>
+        </CustomTooltip>
+        
+        <div className="border-t border-sidebar-border pt-2 mt-2 space-y-2">
+          <CustomTooltip content="Очистить чат">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full h-10" 
+              onClick={handleClearChat}
+              disabled={!hasMessages}
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </CustomTooltip>
+          
+          <CustomTooltip content="Экспорт">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full h-10" 
+              onClick={handleExport}
+              disabled={!hasMessages}
+            >
+              <Download className="w-4 h-4" />
+            </Button>
+          </CustomTooltip>
+          
+          <CustomTooltip content="Выбор модели">
+            <Button variant="ghost" size="sm" className="w-full h-10">
+              <Settings className="w-4 h-4" />
+            </Button>
+          </CustomTooltip>
+        </div>
       </div>
     );
   }
