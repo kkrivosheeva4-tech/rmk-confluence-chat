@@ -87,7 +87,7 @@ export const SidebarRight: React.FC = () => {
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-sidebar border-l border-sidebar-border p-2 flex flex-col gap-2">
+      <div className="w-16 h-full bg-sidebar border-l border-sidebar-border p-2 flex flex-col gap-2">
         <CustomTooltip content="Развернуть панель">
           <Button
             variant="ghost"
@@ -159,7 +159,7 @@ export const SidebarRight: React.FC = () => {
   }
 
   return (
-    <div className="w-80 bg-sidebar border-l border-sidebar-border flex flex-col">
+    <div className="w-80 h-full bg-sidebar border-l border-sidebar-border flex flex-col">
       {/* Заголовок */}
       <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
         <h2 className="font-semibold text-sidebar-foreground">Панель управления</h2>

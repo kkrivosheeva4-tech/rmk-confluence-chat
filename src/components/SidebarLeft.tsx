@@ -20,7 +20,7 @@ export const SidebarLeft: React.FC = () => {
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-sidebar border-r border-sidebar-border p-2 flex flex-col gap-2">
+      <div className="w-16 h-full bg-sidebar border-r border-sidebar-border p-2 flex flex-col gap-2">
         <CustomTooltip content="Развернуть историю">
           <Button
             variant="ghost"
@@ -64,7 +64,7 @@ export const SidebarLeft: React.FC = () => {
   }
 
   return (
-    <div className="w-80 bg-sidebar border-r border-sidebar-border">
+    <div className="w-80 h-full bg-sidebar border-r border-sidebar-border flex flex-col">
       {/* Заголовок */}
       <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
         <h2 className="font-semibold text-sidebar-foreground">История чатов</h2>
