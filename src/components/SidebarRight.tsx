@@ -101,25 +101,25 @@ export const SidebarRight: React.FC = () => {
         
         <CustomTooltip content="Источники">
           <Button variant="ghost" size="sm" className="w-full h-10">
-            <FileText className="w-4 h-4" />
+            <FileText className="w-6 h-6" />
           </Button>
         </CustomTooltip>
         
         <CustomTooltip content="Помогло">
           <Button variant="ghost" size="sm" className="w-full h-10">
-            <ThumbsUp className="w-4 h-4" />
+            <ThumbsUp className="w-6 h-6 text-green-600" />
           </Button>
         </CustomTooltip>
         
         <CustomTooltip content="Не помогло">
           <Button variant="ghost" size="sm" className="w-full h-10">
-            <ThumbsDown className="w-4 h-4" />
+            <ThumbsDown className="w-6 h-6 text-red-600" />
           </Button>
         </CustomTooltip>
         
         <CustomTooltip content="Эскалация">
           <Button variant="ghost" size="sm" className="w-full h-10" onClick={handleEscalation}>
-            <AlertTriangle className="w-4 h-4" />
+            <AlertTriangle className="w-6 h-6" />
           </Button>
         </CustomTooltip>
         
@@ -132,7 +132,7 @@ export const SidebarRight: React.FC = () => {
               onClick={handleClearChat}
               disabled={!hasMessages}
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-6 h-6" />
             </Button>
           </CustomTooltip>
           
@@ -144,13 +144,13 @@ export const SidebarRight: React.FC = () => {
               onClick={handleExport}
               disabled={!hasMessages}
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-6 h-6" />
             </Button>
           </CustomTooltip>
           
-          <CustomTooltip content="Выбор модели">
-            <Button variant="ghost" size="sm" className="w-full h-10">
-              <Settings className="w-4 h-4" />
+          <CustomTooltip content="Выбор модели - реализация на будущее">
+            <Button variant="ghost" size="sm" className="w-full h-10" disabled>
+              <Settings className="w-6 h-6" />
             </Button>
           </CustomTooltip>
         </div>
@@ -312,15 +312,16 @@ export const SidebarRight: React.FC = () => {
         {/* Выбор модели */}
         <div className="space-y-2">
           <h3 className="text-sm font-medium text-sidebar-foreground">Модель ИИ</h3>
-          <Select value={selectedModel} onValueChange={(value) => setSelectedModel(value as any)}>
-            <SelectTrigger className="w-full">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="fast">Быстрая</SelectItem>
-              <SelectItem value="quality">Качественная</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="relative">
+            <Select value={selectedModel} disabled>
+              <SelectTrigger className="w-full opacity-50 cursor-not-allowed">
+                <SelectValue placeholder="openai/gpt-oss-120b" />
+              </SelectTrigger>
+            </Select>
+            <CustomTooltip content="Выбор модели - реализация на будущее">
+              <div className="absolute inset-0 cursor-help" />
+            </CustomTooltip>
+          </div>
         </div>
 
         {/* Статус индекса (только для админа) */}

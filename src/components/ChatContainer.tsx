@@ -120,7 +120,7 @@ export const ChatContainer: React.FC = () => {
                 <div className="flex items-center gap-2 p-4 bg-chat-bubble-bot rounded-lg">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   <span className="text-sm text-chat-bubble-bot-foreground">
-                    {selectedModel === 'fast' ? 'Быстро думаю...' : 'Анализирую подробно...'}
+                    Обрабатываю ваш запрос...
                   </span>
                 </div>
               </div>

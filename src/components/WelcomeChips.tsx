@@ -6,9 +6,9 @@ interface WelcomeChipsProps {
 }
 
 const popularQuestions = [
-  'Как настроить VPN?',
-  'Где найти инструкцию по отпуску?',
-  'Как запросить доступ к Confluence?',
+  'Зачем нам вообще нужна распределённая файловая система DFS?',
+  'Что такое Ansible и зачем он нам нужен?',
+  'Кто отвечает за направление «Связь» и где вести задачи?',
 ];
 
 export const WelcomeChips: React.FC<WelcomeChipsProps> = ({ onQuestionSelect }) => {

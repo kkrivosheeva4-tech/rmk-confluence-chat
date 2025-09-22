@@ -1,114 +1,90 @@
-import { AnswerDTO, AIModel } from '../types/Message';
+import { AIModel, AnswerDTO } from '../types/Message';
 
 export class LLMAdapter {
-  private static mockResponses = [
+  private static predefinedQA = [
     {
-      content: `**Настройка VPN для сотрудников РМК**
-
-1. **Скачайте клиент VPN** с корпоративного портала в разделе "ИТ-сервисы"
-2. **Получите учётные данные** у администратора ИТ (заявка через ServiceDesk)  
-3. **Установите сертификаты** согласно инструкции в приложении
-4. **Проверьте подключение** через тестовый ресурс test.rmk.internal
-5. **При проблемах** обратитесь в техподдержку: ext. 2248
-
-*Доступ предоставляется только сотрудникам с соответствующим уровнем допуска.*`,
-      confidence: 0.95,
-      sources: [
-        {
-          title: 'Инструкция по настройке VPN',
-          url: 'https://confluence.rmk.ru/display/IT/VPN-Setup',
-          excerpt: 'Пошаговое руководство по настройке VPN-подключения для удалённой работы...',
-          accessLevel: 'public' as const,
-        },
-        {
-          title: 'Политики ИБ - Удалённый доступ',
-          url: 'https://confluence.rmk.ru/display/SEC/Remote-Access',
-          excerpt: 'Требования безопасности при работе через VPN-соединения...',
-          accessLevel: 'restricted' as const,
-        },
-      ],
-      followUpQuestions: [
-        'Как получить права администратора?',
-        'Что делать если VPN не подключается?',
-      ],
+      keywords: ['зачем', 'dfs', 'распределённая', 'файловая', 'система'],
+      answer: "Чтобы избавиться от монолитного сервера, который сложно обновлять и резервировать. DFS делает систему отказоустойчивой – если один сервер упадёт, пользователи даже не заметят, потому что данные реплицируются на другие серверы.",
+      source: {
+        title: "Инженерные системы и Hardware.docx",
+        url: "https://confluence.company.ru/pages/dfs-systems",
+        excerpt: "Предпосылки внедрения распределённых файловых систем",
+        accessLevel: 'public' as const
+      }
     },
     {
-      content: `**Оформление отпуска в системе HR**
-
-1. **Войдите в систему** hr.rmk.ru под корпоративными учётными данными
-2. **Выберите раздел** "Мой отпуск" → "Подать заявление"
-3. **Укажите даты** начала и окончания отпуска
-4. **Загрузите документы** (при необходимости - справка, путёвка)
-5. **Отправьте на согласование** руководителю
-6. **Ожидайте одобрения** в течение 3-5 рабочих дней
-
-*Заявление подаётся не позднее чем за 14 дней до начала отпуска.*`,
-      confidence: 0.88,
-      sources: [
-        {
-          title: 'Регламент оформления отпусков',
-          url: 'https://confluence.rmk.ru/display/HR/Vacation-Policy',
-          excerpt: 'Порядок подачи заявлений на отпуск и необходимые документы...',
-          accessLevel: 'public' as const,
-        },
-      ],
-      followUpQuestions: [
-        'Как перенести уже одобренный отпуск?',
-        'Можно ли взять отпуск авансом?',
-      ],
+      keywords: ['сервер', 'данные', 'отключен', 'перезапишет', 'актуальность'],
+      answer: "Нет, благодаря функции «Актуальность содержимого» сервер, который долго был отключен, не сможет перезаписать свежие данные своими устаревшими. Это защита от случайной потери информации.",
+      source: {
+        title: "Концепция сервис файлового хранения на базе DFS.docx",
+        url: "https://confluence.company.ru/pages/dfs-content-freshness",
+        excerpt: "Раздел «Актуальность содержимого» - защита от перезаписи актуальных данных",
+        accessLevel: 'public' as const
+      }
     },
     {
-      content: `**Запрос доступа к Confluence**
-
-1. **Создайте заявку** в ServiceDesk (servicedesk.rmk.ru)
-2. **Укажите категорию** "Доступы и права" → "Confluence"
-3. **Приложите обоснование** - проект или задача, требующая доступа
-4. **Получите согласование** от руководителя проекта
-5. **Дождитесь обработки** заявки (1-2 рабочих дня)
-
-Для доступа к разделам с ограниченным доступом потребуется дополнительное согласование службы ИБ.`,
-      confidence: 0.92,
-      sources: [
-        {
-          title: 'Процедура получения доступов',
-          url: 'https://confluence.rmk.ru/display/IT/Access-Request',
-          excerpt: 'Стандартная процедура запроса доступа к корпоративным системам...',
-          accessLevel: 'public' as const,
-        },
-        {
-          title: 'Матрица доступов Confluence',
-          url: 'https://confluence.rmk.ru/display/SEC/Access-Matrix',
-          excerpt: 'Уровни доступа и требования для различных разделов Confluence...',
-          accessLevel: 'restricted' as const,
-        },
-      ],
+      keywords: ['ansible', 'зачем', 'автоматизация'],
+      answer: "Ansible – это система для автоматизации рутинных задач, например, настройки серверов, раскладки SSH–ключей или обновления ПО. Мы решили его внедрить, чтобы сэкономить время администраторов и уменьшить количество ручной работы.",
+      source: {
+        title: "Linux СПО.docx",
+        url: "https://confluence.company.ru/pages/linux-software",
+        excerpt: "Документ от 9 окт. 2023 г. об автоматизации с помощью Ansible",
+        accessLevel: 'public' as const
+      }
     },
+    {
+      keywords: ['альтернативы', 'microsoft', 'office', 'visio', 'linux'],
+      answer: "Вместо MS Office – LibreOffice (базовый функционал) или OnlyOffice (дизайн как в MS Office, но макросы на JavaScript). Вместо Visio – LibreOffice Draw (базово) или EdrawMax (открывает vsdx–файлы, но частично без перевода).",
+      source: {
+        title: "Linux СПО.docx",
+        url: "https://confluence.company.ru/pages/linux-alternatives",
+        excerpt: "Таблица «Альтернативные программные продукты», разделы «Офисный пакет» и «Дополнительный офисный пакет»",
+        accessLevel: 'public' as const
+      }
+    },
+    {
+      keywords: ['ответственный', 'связь', 'сатурнов', 'jira', 'задачи'],
+      answer: "Ответственный – Сатурнов С.С. Все задачи по связи ведутся в специальной доске Jira (уточните название у ответственного). На встречах обсуждаются объекты связи, подходы, инструменты и задействованные сотрудники.",
+      source: {
+        title: "Связь (телефония, ВОЛС–ы, каналы связи, ТВ, GSM).docx",
+        url: "https://confluence.company.ru/pages/communications",
+        excerpt: "Шапка документа и протокол от 17 авг. 2023 г.",
+        accessLevel: 'public' as const
+      }
+    }
   ];
 
   static async generateAnswer(query: string, model: AIModel): Promise<AnswerDTO> {
-    // Имитация времени ответа в зависимости от модели
-    const delay = model === 'fast' ? 500 : 1500;
+    // Имитируем задержку обработки
+    const delay = 800;
     await new Promise(resolve => setTimeout(resolve, delay));
 
-    // Выбираем подходящий ответ на основе ключевых слов
-    let selectedResponse = this.mockResponses[0]; // По умолчанию VPN
-
-    if (query.toLowerCase().includes('отпуск')) {
-      selectedResponse = this.mockResponses[1];
-    } else if (query.toLowerCase().includes('confluence') || query.toLowerCase().includes('доступ')) {
-      selectedResponse = this.mockResponses[2];
+    const lowerQuery = query.toLowerCase();
+    
+    // Поиск среди предопределенных вопросов/ответов
+    for (const qa of this.predefinedQA) {
+      if (qa.keywords.some(keyword => lowerQuery.includes(keyword))) {
+        return {
+          content: qa.answer,
+          confidence: 0.95,
+          sources: [qa.source],
+          followUpQuestions: []
+        };
+      }
     }
 
-    // Для качественной модели добавляем больше деталей
-    if (model === 'quality') {
-      selectedResponse = {
-        ...selectedResponse,
-        confidence: Math.min(selectedResponse.confidence + 0.05, 1),
-        content: selectedResponse.content + '\n\n*Ответ сгенерирован качественной моделью с дополнительной проверкой.*'
-      };
-    }
-
-    return selectedResponse;
+    // Если вопрос не найден среди предопределенных
+    return {
+      content: "К сожалению, я не могу ответить на данный вопрос. Попробуйте перефразировать или обратитесь напрямую к техподдержке.",
+      confidence: 0.1,
+      sources: [{
+        title: "Техподдержка РМК",
+        url: "https://confluence.company.ru/pages/support",
+        excerpt: "Контакты службы технической поддержки",
+        accessLevel: 'public' as const
+      }],
+      followUpQuestions: ["Как связаться с техподдержкой?", "Где найти контакты IT-отдела?"]
+    };
   }
 
   static shouldShowFollowUp(confidence: number): boolean {

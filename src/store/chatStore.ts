@@ -28,7 +28,7 @@ export const useChatStore = create<ChatState>()(
       messages: [],
       chatHistory: [],
       isLoading: false,
-      selectedModel: 'fast',
+      selectedModel: 'openai/gpt-oss-120b',
 
       addMessage: (message) => {
         const newMessage: Message = {
@@ -37,9 +37,32 @@ export const useChatStore = create<ChatState>()(
           timestamp: new Date(),
         };
 
-        set((state) => ({
-          messages: [...state.messages, newMessage],
-        }));
+        set((state) => {
+          const updatedMessages = [...state.messages, newMessage];
+          
+          // Обновляем историю чатов при добавлении сообщения
+          const currentChatId = state.currentChatId;
+          if (currentChatId) {
+            const updatedHistory = state.chatHistory.map(chat => 
+              chat.id === currentChatId 
+                ? {
+                    ...chat,
+                    title: updatedMessages[0]?.content?.slice(0, 50) + '...' || 'Новый чат',
+                    lastMessage: newMessage.content.slice(0, 100) + (newMessage.content.length > 100 ? '...' : ''),
+                    timestamp: new Date(),
+                    messages: updatedMessages,
+                  }
+                : chat
+            );
+            
+            return {
+              messages: updatedMessages,
+              chatHistory: updatedHistory,
+            };
+          }
+          
+          return { messages: updatedMessages };
+        });
       },
 
       updateMessage: (id, updates) => {
@@ -76,11 +99,21 @@ export const useChatStore = create<ChatState>()(
           }));
         }
 
-        // Создаём новый чат
-        set({
-          currentChatId: crypto.randomUUID(),
+        // Создаём новый чат и сразу добавляем его в историю
+        const newChatId = crypto.randomUUID();
+        const newChatItem: ChatHistoryItem = {
+          id: newChatId,
+          title: 'Новый чат',
+          lastMessage: '',
+          timestamp: new Date(),
           messages: [],
-        });
+        };
+
+        set((state) => ({
+          currentChatId: newChatId,
+          messages: [],
+          chatHistory: [newChatItem, ...state.chatHistory],
+        }));
       },
 
       loadChat: (chatId) => {

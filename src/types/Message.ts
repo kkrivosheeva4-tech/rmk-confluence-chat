@@ -31,7 +31,7 @@ export type ChatHistoryItem = {
 
 export type UserRole = 'user' | 'admin';
 
-export type AIModel = 'fast' | 'quality';
+export type AIModel = 'openai/gpt-oss-120b';
 
 export type FeedbackDTO = {
   messageId: string;

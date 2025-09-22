@@ -20,13 +20,18 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
   const handleFeedback = (feedback: 'helpful' | 'unhelpful') => {
     updateMessage(message.id, { feedback });
     
-    if (feedback === 'unhelpful') {
-      setShowCommentInput(true);
-    } else {
+    if (feedback === 'helpful') {
       toast({
         title: "Спасибо за оценку!",
-        description: "Ваш отзыв поможет улучшить качество ответов.",
+        description: "Данный ответ будет учитываться при дальнейшем обучении модели!",
       });
+      setShowCommentInput(true); // Показываем поле для комментария даже для положительного отзыва
+    } else {
+      toast({
+        title: "Спасибо за отзыв!",
+        description: "Ваша оценка поможет улучшить ответы",
+      });
+      setShowCommentInput(true);
     }
   };
 
@@ -55,8 +60,8 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
             ? 'bg-chat-bubble-user text-chat-bubble-user-foreground ml-auto' 
             : 'bg-chat-bubble-bot text-chat-bubble-bot-foreground'
         }`}>
-          <div className="prose prose-sm max-w-none">
-            <div className="whitespace-pre-wrap">{message.content}</div>
+          <div className="text-sm leading-relaxed">
+            {message.content.replace(/\*\*/g, '').replace(/\*/g, '')}
           </div>
 
           {/* Источники */}
@@ -87,24 +92,36 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({ message }) => {
           {!isUser && (
             <div className="flex gap-2 mt-3 pt-3 border-t border-border/20">
               <Button
-                variant={message.feedback === 'helpful' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
                 onClick={() => handleFeedback('helpful')}
                 disabled={!!message.feedback}
-                className="text-xs"
+                className={`text-xs gap-1 transition-colors ${
+                  message.feedback === 'helpful' 
+                    ? 'bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800' 
+                    : 'hover:bg-green-50 hover:text-green-600 dark:hover:bg-green-950 dark:hover:text-green-400'
+                }`}
               >
-                <ThumbsUp className="w-3 h-3 mr-1" />
-                Помогло
+                <ThumbsUp className={`w-4 h-4 ${message.feedback === 'helpful' ? 'text-green-600' : 'text-green-500'}`} />
+                <span className={message.feedback === 'helpful' ? 'text-green-700 dark:text-green-300' : 'text-green-600 dark:text-green-400'}>
+                  Помогло
+                </span>
               </Button>
               <Button
-                variant={message.feedback === 'unhelpful' ? 'destructive' : 'ghost'}
+                variant="ghost"
                 size="sm"
                 onClick={() => handleFeedback('unhelpful')}
                 disabled={!!message.feedback}
-                className="text-xs"
+                className={`text-xs gap-1 transition-colors ${
+                  message.feedback === 'unhelpful' 
+                    ? 'bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800' 
+                    : 'hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950 dark:hover:text-red-400'
+                }`}
               >
-                <ThumbsDown className="w-3 h-3 mr-1" />
-                Не помогло
+                <ThumbsDown className={`w-4 h-4 ${message.feedback === 'unhelpful' ? 'text-red-600' : 'text-red-500'}`} />
+                <span className={message.feedback === 'unhelpful' ? 'text-red-700 dark:text-red-300' : 'text-red-600 dark:text-red-400'}>
+                  Не помогло
+                </span>
               </Button>
             </div>
           )}

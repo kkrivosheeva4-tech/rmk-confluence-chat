@@ -37,24 +37,24 @@ export const SidebarLeft: React.FC = () => {
             variant="ghost"
             size="sm"
             onClick={createNewChat}
-            className="w-full h-10"
+            className="w-full h-12"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-6 h-6" />
           </Button>
         </CustomTooltip>
 
-        <div className="border-t border-sidebar-border pt-2 mt-2 space-y-1 overflow-auto">
-          {chatHistory.slice(0, 8).map((chat) => (
+        <div className="border-t border-sidebar-border pt-2 mt-2 space-y-1 flex-1 overflow-auto">
+          {chatHistory.slice(0, 10).map((chat) => (
             <CustomTooltip key={chat.id} content={chat.title}>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => loadChat(chat.id)}
-                className={`w-full h-10 p-0 ${
+                className={`w-full h-10 p-1 ${
                   currentChatId === chat.id ? 'bg-sidebar-accent' : ''
                 }`}
               >
-                <MessageSquare className="w-4 h-4" />
+                <MessageSquare className="w-5 h-5" />
               </Button>
             </CustomTooltip>
           ))}
