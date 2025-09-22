@@ -43,17 +43,21 @@ export const useChatStore = create<ChatState>()(
           // Обновляем историю чатов при добавлении сообщения
           const currentChatId = state.currentChatId;
           if (currentChatId) {
-            const updatedHistory = state.chatHistory.map(chat => 
-              chat.id === currentChatId 
-                ? {
-                    ...chat,
-                    title: updatedMessages[0]?.content?.slice(0, 50) + '...' || 'Новый чат',
-                    lastMessage: newMessage.content.slice(0, 100) + (newMessage.content.length > 100 ? '...' : ''),
-                    timestamp: new Date(),
-                    messages: updatedMessages,
-                  }
-                : chat
-            );
+            // Находим чат в истории или создаем новый
+            const existingChatIndex = state.chatHistory.findIndex(chat => chat.id === currentChatId);
+            const chatItem = {
+              id: currentChatId,
+              title: updatedMessages[0]?.content?.slice(0, 50) + '...' || 'Новый чат',
+              lastMessage: newMessage.content.slice(0, 100) + (newMessage.content.length > 100 ? '...' : ''),
+              timestamp: new Date(),
+              messages: updatedMessages,
+            };
+            
+            const updatedHistory = existingChatIndex >= 0
+              ? state.chatHistory.map((chat, index) => 
+                  index === existingChatIndex ? chatItem : chat
+                )
+              : [chatItem, ...state.chatHistory];
             
             return {
               messages: updatedMessages,
@@ -81,7 +85,7 @@ export const useChatStore = create<ChatState>()(
       },
 
       createNewChat: () => {
-        const { messages, currentChatId } = get();
+        const { messages, currentChatId, chatHistory } = get();
         
         // Сохраняем текущий чат в историю если есть сообщения
         if (messages.length > 0 && currentChatId) {
@@ -94,26 +98,25 @@ export const useChatStore = create<ChatState>()(
             messages,
           };
 
+          // Проверяем, нет ли уже такого чата в истории
+          const existingChatIndex = chatHistory.findIndex(chat => chat.id === currentChatId);
+          
           set((state) => ({
-            chatHistory: [chatItem, ...state.chatHistory],
+            chatHistory: existingChatIndex >= 0 
+              ? state.chatHistory.map((chat, index) => 
+                  index === existingChatIndex ? chatItem : chat
+                )
+              : [chatItem, ...state.chatHistory],
           }));
         }
 
-        // Создаём новый чат и сразу добавляем его в историю
+        // Создаём новый чат
         const newChatId = crypto.randomUUID();
-        const newChatItem: ChatHistoryItem = {
-          id: newChatId,
-          title: 'Новый чат',
-          lastMessage: '',
-          timestamp: new Date(),
-          messages: [],
-        };
 
-        set((state) => ({
+        set({
           currentChatId: newChatId,
           messages: [],
-          chatHistory: [newChatItem, ...state.chatHistory],
-        }));
+        });
       },
 
       loadChat: (chatId) => {

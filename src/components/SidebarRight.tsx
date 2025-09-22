@@ -179,22 +179,22 @@ export const SidebarRight: React.FC = () => {
           <TabsList className="grid w-full grid-cols-4 m-2">
             <CustomTooltip content="Раздел отображающий источники, из которых взяты ответы">
               <TabsTrigger value="sources" className="text-xs">
-                <FileText className="w-3 h-3" />
+                <FileText className="w-5 h-5" />
               </TabsTrigger>
             </CustomTooltip>
             <CustomTooltip content="Ответы, которые помогли">
               <TabsTrigger value="helpful" className="text-xs">
-                <ThumbsUp className="w-3 h-3" />
+                <ThumbsUp className="w-5 h-5 text-green-600" />
               </TabsTrigger>
             </CustomTooltip>
             <CustomTooltip content="Ответы, которые не помогли">
               <TabsTrigger value="unhelpful" className="text-xs">
-                <ThumbsDown className="w-3 h-3" />
+                <ThumbsDown className="w-5 h-5 text-red-600" />
               </TabsTrigger>
             </CustomTooltip>
             <CustomTooltip content="Раздел в разработке">
               <TabsTrigger value="escalations" className="text-xs" onClick={handleEscalation}>
-                <AlertTriangle className="w-3 h-3" />
+                <AlertTriangle className="w-5 h-5" />
               </TabsTrigger>
             </CustomTooltip>
           </TabsList>
@@ -309,19 +309,18 @@ export const SidebarRight: React.FC = () => {
           </Button>
         </div>
 
-        {/* Выбор модели */}
+        {/* Текущая модель */}
         <div className="space-y-2">
-          <h3 className="text-sm font-medium text-sidebar-foreground">Модель ИИ</h3>
-          <div className="relative">
-            <Select value={selectedModel} disabled>
-              <SelectTrigger className="w-full opacity-50 cursor-not-allowed">
-                <SelectValue placeholder="openai/gpt-oss-120b" />
-              </SelectTrigger>
-            </Select>
-            <CustomTooltip content="Выбор модели - реализация на будущее">
-              <div className="absolute inset-0 cursor-help" />
-            </CustomTooltip>
-          </div>
+          <h3 className="text-sm font-medium text-sidebar-foreground">Текущая модель</h3>
+          <Card className="p-3">
+            <div className="flex items-center gap-2">
+              <Settings className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium">openai/gpt-oss-120b</span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Выбор модели - реализация на будущее
+            </p>
+          </Card>
         </div>
 
         {/* Статус индекса (только для админа) */}
